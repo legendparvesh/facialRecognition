@@ -59,12 +59,12 @@ def markAttendance(name):
             datevar = today.strftime('%d%m%Y')
             subject = 'EC18301'
 
-            finalstr = "create table attendance4%s%s (name varchar(20),time TIME);" % (datevar, subject)
-            val2 = (datevar, subject)
+            #finalstr = "create table attendance%s%s (name varchar(20),time TIME);" % (datevar, subject)
+            #val2 = (datevar, subject)
 
-            mycursor.execute(finalstr)
+            #mycursor.execute(finalstr)
             #namevar = "stany"
-            sql = "INSERT INTO attendance3%s%s (name, time) VALUES ('%s','%s');" % (
+            sql = "INSERT INTO attendance%s%s (name, time) VALUES ('%s','%s');" % (
             datevar, subject, name, dtString)
 
             mycursor.execute(sql)
@@ -100,16 +100,19 @@ while True:
         print(faceDis)
         matchIndex = np.argmin(faceDis)
 
-        if matches[matchIndex]:
+
+
+        if faceDis[matchIndex] < 0.50:
             name = classNames[matchIndex].upper()
-            stuname=name
-            print(name)
-            y1, x2, y2, x1 = faceLoc
-            y1, x2, y2, x1 = y1 * 4, x2 * 4, y2 * 4, x1 * 4
-            cv2.rectangle(img, (x1, y1), (x2, y2), (0, 255, 0), 2)
-            cv2.rectangle(img, (x1, y2 - 35), (x2, y2), (0, 255, 0), cv2.FILLED)
-            cv2.putText(img, name, (x1 + 6, y2 - 6), cv2.FONT_HERSHEY_COMPLEX, 1, (255, 255, 255), 2)
             markAttendance(name)
+        else:
+            name = 'Unknown'
+        # print(name)
+        y1, x2, y2, x1 = faceLoc
+        y1, x2, y2, x1 = y1 * 4, x2 * 4, y2 * 4, x1 * 4
+        cv2.rectangle(img, (x1, y1), (x2, y2), (0, 255, 0), 2)
+        cv2.rectangle(img, (x1, y2 - 35), (x2, y2), (0, 255, 0), cv2.FILLED)
+        cv2.putText(img, name, (x1 + 6, y2 - 6), cv2.FONT_HERSHEY_COMPLEX, 1, (255, 255, 255), 2)
 
     cv2.imshow('Webcam', img)
     cv2.waitKey(1)
